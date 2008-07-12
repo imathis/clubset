@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>JSSpec results</title>
+    <link rel="stylesheet" href="assets/JSSpec.css" type="text/css" />
+    <script src="assets/diff_match_patch.js" type="text/javascript"></script>
+    <script src="assets/JSSpec.js" type="text/javascript"></script>
+    <script src="../prototype.lite.js" type="text/javascript"></script>
+    <script src="../clubset.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    // <![CDATA[
+      describe('Game', {
+        'should have a deck': function() {with(self){
+          var game = new Game();
+          expect(game.deck).should_not_be(null);
+        }}
+      });
+      
+      describe('Deck', {
+        'should have 81 cards, each with a different face': function() {with(self){
+          var game = new Game();
+          expect(game.deck.cards.length).should_be(81);
+          expect(typeof game.deck.cards[0]).should_not_be('undefined');
+          
+          var seen = new Array();
+          game.deck.cards.forEach(function(card) {
+            seen.forEach(function(seenCard) {
+              card.compareValue = card.image + String(card.count);
+              expect(card.compareValue == seenCard.compareValue).should_be(false);
+            });
+            seen.push(card);
+          });
+        }}
+      });
+      
+      describe('Card', {
+        'should have an image': function() {with(self){
+          expect(new Card('square', 'pink', 'dirt', 4).image).should_be('square-pink-dirt.png');
+        }}
+      });
+    // ]]>
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
