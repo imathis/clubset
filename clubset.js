@@ -2,6 +2,12 @@ Game = Class.create();
 Object.extend(Game.prototype, {
   initialize: function() {
     this.deck = new Deck();
+  },
+  
+  deal: function() {
+    this.deck.shuffle();
+    this.table = new Table();
+    this.table.cards = this.deck.cards.splice(0,12);
   }
 });
 
@@ -22,6 +28,10 @@ Object.extend(Deck.prototype, {
         }, this)
       }, this)
     }, this);
+  },
+  
+  shuffle: function() {
+    this.cards.shuffle();
   }
 });
 
@@ -32,3 +42,34 @@ Object.extend(Card.prototype, {
     this.image = this.shape + '-' + this.color + '-' + this.fill + '.png';
   }
 });
+
+Table = Class.create();
+Object.extend(Table.prototype, {
+  initialize: function() {
+  },
+  
+  build: function() {
+    var table = document.createElement('div');
+    table.id = 'table';
+    
+    this.cards.forEach(function(card) {
+      var face = document.createElement('div');
+      face.className = 'face';
+      for (var index = 0; index < card.count; index++) {
+        var img = document.createElement('img');
+        img.src = Game.imagePath + card.image;
+        img.className = 'mark';
+        face.appendChild(img);
+      }
+      var cardElement = document.createElement('div');
+      cardElement.className = 'card';
+      cardElement.appendChild(face);
+      table.appendChild(cardElement);
+    });
+    document.body.appendChild(table);
+  }
+});
+
+Array.prototype.shuffle = function(){
+  for(var j, x, i = this.length; i; j = parseInt(Math.random() * i), x = this[--i], this[i] = this[j], this[j] = x);
+};

@@ -11,24 +11,55 @@
     <script src="../clubset.js" type="text/javascript"></script>
     <script type="text/javascript">
     // <![CDATA[
+      Game.imagePath = '../images/';
+      
+      function cardsEqual(a,b) {
+        if (!a.compareValue) a.compareValue = a.image + String(a.count);
+        if (!b.compareValue) b.compareValue = b.image + String(b.count);
+        return a.compareValue == b.compareValue;
+      };
+      
       describe('Game', {
+        'before': function() {with(self){
+          game = new Game();
+        }},
+        
         'should have a deck': function() {with(self){
-          var game = new Game();
           expect(game.deck).should_not_be(null);
+        }},
+        
+        'should deal twelve cards to the table, removing them from the deck': function() {with(self){
+          game.deal();
+          expect(game.table.cards.length).should_be(12);
+          expect(game.deck.cards.length).should_be(69);
+        }},
+        
+        'should deal different cards on each deal': function() {with(self) {
+          game.deal();
+          game2 = new Game();
+          game2.deal();
+          
+          var equalInAllPositions = true;
+          game2.table.cards.forEach(function(card, index) {
+            equalInAllPositions = equalInAllPositions && cardsEqual(card, game.table.cards[index]);
+          });
+          expect(equalInAllPositions).should_be(false);
         }}
       });
       
       describe('Deck', {
+        'before': function() {with(self){
+          game = new Game();
+        }},
+        
         'should have 81 cards, each with a different face': function() {with(self){
-          var game = new Game();
           expect(game.deck.cards.length).should_be(81);
           expect(typeof game.deck.cards[0]).should_not_be('undefined');
           
           var seen = new Array();
           game.deck.cards.forEach(function(card) {
             seen.forEach(function(seenCard) {
-              card.compareValue = card.image + String(card.count);
-              expect(card.compareValue == seenCard.compareValue).should_be(false);
+              expect(cardsEqual(card, seenCard)).should_be(false);
             });
             seen.push(card);
           });
@@ -38,6 +69,19 @@
       describe('Card', {
         'should have an image': function() {with(self){
           expect(new Card('square', 'pink', 'dirt', 4).image).should_be('square-pink-dirt.png');
+        }}
+      });
+      
+      describe('Table', {
+        'should build all cards according to face': function() {with(self){
+          var table = new Table();
+          table.cards = [new Card('club', 'blue', 'stripe', 3)];
+          table.build();
+          
+          expect($('table')).should_not_be(null);
+          expect(document.getElementsByClassName('card').length).should_be(1);
+          expect(document.getElementsByClassName('face').length).should_be(1);
+          expect(document.getElementsByClassName('mark').length).should_be(3);
         }}
       });
     // ]]>
