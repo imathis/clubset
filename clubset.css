@@ -1,0 +1,38 @@
+#table {
+  width: 320px;
+  height: 410px;
+  background: url("images/table.png") no-repeat;
+  padding: 70px 12px 0 12px;
+}
+.card {
+  display: inline-block;
+  margin: 2px 0;
+  
+}
+.card:nth-child(2), .card:nth-child(5), .card:nth-child(8), .card:nth-child(11), .card:nth-child(14) {
+  margin-right: 3px;
+  margin-left: 3px;
+}
+
+.face {
+  background: url("images/card.png") no-repeat;
+  height: 38px;
+  width: 80px;
+  padding: 8px;
+  text-align: center;
+}
+.face:hover{
+  background-position: 0 -54px;
+}
+.face:active,.face.chosen{
+  background-position: 0 -108px;
+}
+.face img {
+  padding-top: 1px;
+}
+.face img:first-child {
+  margin-right: 1px;
+}
+.face img:last-child {
+  margin-left: 1px;
+}
