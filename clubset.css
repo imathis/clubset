@@ -1,21 +1,24 @@
 body{
   padding:0;
   margin:0;
+  overflow: hidden;
 }
 #table {
-  width: 294px;
-  height: 410px;
-  background: url("images/table.png") no-repeat;
-  padding: 70px 13px 0 13px;
+  height: 361px;
+  width: 298px;
+  margin: 0 auto;
+  overflow: hidden;
+  background: url("images/table.png") no-repeat #000;
+  padding: 55px 11px 0 11px;
 }
 .card {
   display: inline-block;
-  margin: 2px 0;
+  margin-bottom: 5px;
   
 }
 .card:nth-child(2), .card:nth-child(5), .card:nth-child(8), .card:nth-child(11), .card:nth-child(14) {
-  margin-right: 3px;
-  margin-left: 3px;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .face {
@@ -24,11 +27,9 @@ body{
   width: 80px;
   padding: 8px;
   text-align: center;
+  
 }
-.face:hover{
-  background-position: 0 -54px;
-}
-.face:active,.face.chosen{
+.face.selected{
   background-position: 0 -108px;
 }
 .face img {

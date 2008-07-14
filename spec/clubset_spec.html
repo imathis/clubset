@@ -24,20 +24,20 @@
           game = new Game();
         }},
         
-        'should have a deck': function() {with(self){
-          expect(game.deck).should_not_be(null);
+        'should have a table': function() {with(self){
+          expect(game.table).should_not_be(null);
         }},
         
         'should deal twelve cards to the table, removing them from the deck': function() {with(self){
-          game.deal();
+          game.table.deal();
           expect(game.table.cards.length).should_be(12);
-          expect(game.deck.cards.length).should_be(69);
+          expect(game.table.deck.cards.length).should_be(69);
         }},
         
         'should deal different cards on each deal': function() {with(self) {
-          game.deal();
+          game.table.deal();
           game2 = new Game();
-          game2.deal();
+          game2.table.deal();
           
           var equalInAllPositions = true;
           game2.table.cards.forEach(function(card, index) {
@@ -53,11 +53,11 @@
         }},
         
         'should have 81 cards, each with a different face': function() {with(self){
-          expect(game.deck.cards.length).should_be(81);
-          expect(typeof game.deck.cards[0]).should_not_be('undefined');
+          expect(game.table.deck.cards.length).should_be(81);
+          expect(typeof game.table.deck.cards[0]).should_not_be('undefined');
           
           var seen = new Array();
-          game.deck.cards.forEach(function(card) {
+          game.table.deck.cards.forEach(function(card) {
             seen.forEach(function(seenCard) {
               expect(cardsEqual(card, seenCard)).should_be(false);
             });
@@ -73,6 +73,11 @@
       });
       
       describe('Table', {
+        
+        'table should have a deck': function() {with(self){
+          expect(game.table.deck).should_not_be(null);
+        }},
+        
         'should build all cards according to face': function() {with(self){
           var table = new Table();
           table.cards = [new Card('club', 'blue', 'stripe', 3)];

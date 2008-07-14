@@ -1,14 +1,39 @@
 Game = Class.create();
 Object.extend(Game.prototype, {
   initialize: function() {
-    this.deck = new Deck();
-  },
-  
-  deal: function() {
-    this.deck.shuffle();
     this.table = new Table();
-    this.table.cards = this.deck.cards.splice(0,12);
   }
+});
+Table = Class.create();
+Object.extend(Table.prototype, {
+  initialize: function() {
+      this.deck = new Deck();
+    },
+    deal: function() {
+      this.deck.shuffle();
+      this.cards = this.deck.cards.splice(0,12);
+    },
+    
+    build: function() {
+      var table = document.createElement('div');
+      table.id = 'table';
+      var count = 1;
+      this.cards.forEach(function(card) {
+        var face = document.createElement('div');
+        face.className = 'face' + ' face'+(count++);
+        for (var index = 0; index < card.count; index++) {
+          var img = document.createElement('img');
+          img.src = Game.imagePath + card.image;
+          img.className = 'mark';
+          face.appendChild(img);
+        }
+        var cardElement = document.createElement('div');
+        cardElement.className = 'card';
+        cardElement.appendChild(face);
+        table.appendChild(cardElement);
+      });
+      document.body.appendChild(table);
+    }
 });
 
 Deck = Class.create();
@@ -40,33 +65,6 @@ Object.extend(Card.prototype, {
   initialize: function(shape, color, fill, count) {
     this.shape = shape, this.color = color, this.fill = fill, this.count = count;
     this.image = this.shape + '-' + this.color + '-' + this.fill + '.png';
-  }
-});
-
-Table = Class.create();
-Object.extend(Table.prototype, {
-  initialize: function() {
-  },
-  
-  build: function() {
-    var table = document.createElement('div');
-    table.id = 'table';
-    
-    this.cards.forEach(function(card) {
-      var face = document.createElement('div');
-      face.className = 'face';
-      for (var index = 0; index < card.count; index++) {
-        var img = document.createElement('img');
-        img.src = Game.imagePath + card.image;
-        img.className = 'mark';
-        face.appendChild(img);
-      }
-      var cardElement = document.createElement('div');
-      cardElement.className = 'card';
-      cardElement.appendChild(face);
-      table.appendChild(cardElement);
-    });
-    document.body.appendChild(table);
   }
 });
 

@@ -2,6 +2,8 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
+    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <title>ClubSet</title>
     <script src="prototype.lite.js" type="text/javascript"></script>
@@ -13,8 +15,9 @@
     // <![CDATA[
       Game.imagePath = 'images/';
       var game = new Game();
-      game.deal();
+      game.table.deal();
       game.table.build();
+      window.scrollTo(0,0);
     // ]]>
     </script>
   </body>
