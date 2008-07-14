@@ -20,7 +20,7 @@ Object.extend(Table.prototype, {
       var count = 1;
       this.cards.forEach(function(card) {
         var face = document.createElement('div');
-        face.className = 'face' + ' face'+(count++);
+        face.className = 'face';
         for (var index = 0; index < card.count; index++) {
           var img = document.createElement('img');
           img.src = Game.imagePath + card.image;
@@ -29,6 +29,7 @@ Object.extend(Table.prototype, {
         }
         var cardElement = document.createElement('div');
         cardElement.className = 'card';
+        cardElement.id = 'card'+(count++);
         cardElement.appendChild(face);
         table.appendChild(cardElement);
       });

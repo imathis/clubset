@@ -16,7 +16,7 @@ body{
   margin-bottom: 5px;
   
 }
-.card:nth-child(2), .card:nth-child(5), .card:nth-child(8), .card:nth-child(11), .card:nth-child(14) {
+#card2, #card5, #card8, #card11, #card14 {
   margin-right: 5px;
   margin-left: 5px;
 }
