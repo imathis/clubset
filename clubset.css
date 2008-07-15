@@ -11,10 +11,23 @@ body{
   background: url("images/table.png") no-repeat #000;
   padding: 55px 11px 0 11px;
 }
+
 .card {
+  height: 38px;
+  width: 80px;
+  padding: 8px;
   display: inline-block;
+  background: url("images/card.png") no-repeat;
+  margin-top: 0px;
+  opacity: 1;
   margin-bottom: 5px;
-  
+  -webkit-transition: all 0.2s ease-in-out;
+}
+.visible {
+  opacity: 1;
+}
+.hidden {
+  opacity: 0;
 }
 #card2, #card5, #card8, #card11, #card14 {
   margin-right: 5px;
@@ -22,12 +35,7 @@ body{
 }
 
 .face {
-  background: url("images/card.png") no-repeat;
-  height: 38px;
-  width: 80px;
-  padding: 8px;
   text-align: center;
-  
 }
 .face.selected{
   background-position: 0 -108px;

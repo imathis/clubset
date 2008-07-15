@@ -8,33 +8,37 @@ Table = Class.create();
 Object.extend(Table.prototype, {
   initialize: function() {
       this.deck = new Deck();
-    },
-    deal: function() {
-      this.deck.shuffle();
-      this.cards = this.deck.cards.splice(0,12);
-    },
-    
-    build: function() {
-      var table = document.createElement('div');
-      table.id = 'table';
-      var count = 1;
-      this.cards.forEach(function(card) {
-        var face = document.createElement('div');
-        face.className = 'face';
-        for (var index = 0; index < card.count; index++) {
-          var img = document.createElement('img');
-          img.src = Game.imagePath + card.image;
-          img.className = 'mark';
-          face.appendChild(img);
-        }
-        var cardElement = document.createElement('div');
-        cardElement.className = 'card';
-        cardElement.id = 'card'+(count++);
-        cardElement.appendChild(face);
-        table.appendChild(cardElement);
-      });
-      document.body.appendChild(table);
+      this.fx = new Fx();
+  },
+  deal: function() {
+    this.deck.shuffle();
+    this.cards = this.deck.cards.splice(0,12);
+  },
+  
+  build: function() {
+    var table = document.createElement('div');
+    table.id = 'table';
+    var count = 1;
+    for(var i = 0; i<this.cards.length; i++) {
+      card = this.cards[i];
+      var face = document.createElement('div');
+      face.className = 'face';
+      for (var index = 0; index < card.count; index++) {
+        var img = document.createElement('img');
+        img.src = Game.imagePath + card.image;
+        img.className = 'mark';
+        face.appendChild(img);
+      }
+      var cardElement = document.createElement('div');
+      cardElement.className = 'card';
+      cardElement.id = 'card'+(count++);
+      cardElement.appendChild(face);
+      this.fx.mix(cardElement);
+      table.appendChild(cardElement);
     }
+    document.body.appendChild(table);
+    setInterval(this.fx.showAllCards, 10);
+  }
 });
 
 Deck = Class.create();
@@ -66,6 +70,41 @@ Object.extend(Card.prototype, {
   initialize: function(shape, color, fill, count) {
     this.shape = shape, this.color = color, this.fill = fill, this.count = count;
     this.image = this.shape + '-' + this.color + '-' + this.fill + '.png';
+  }
+});
+
+Fx = Class.create();
+Object.extend(Fx.prototype, {
+  initialize:function(){
+  },
+  hideCard: function(cardId){
+    card = document.querySelector('#'+cardId);
+    card.className = "card hidden";
+  },
+  showCard: function(cardId){
+    card = document.querySelector('#'+cardId);
+    card.className = "card visible";
+  },
+  showAllCards: function() {
+    var cards = document.querySelectorAll(".card");
+    for(card=0;card<cards.length; card++){
+      cards[card].className = "card";
+      // cards[card].style.webkitTransform='rotate(0deg)';
+      cards[card].style.webkitTransform='scale(1)';
+    }
+  },
+  hideAllCards: function () {
+    var cards = document.querySelectorAll(".card");
+    for(card=0;card<cards.length; card++){
+      cards[card].className = "card hidden";
+    }
+  },
+  mix: function (card) {
+    card.className = 'card hidden mixed';
+    // var random = 20 + Math.floor(Math.random()*100);
+    // var value = (random%2) ? '-' : '';
+    // card.style.webkitTransform='rotate('+value+random+'deg)';
+    card.style.webkitTransform='scale(0.1)';
   }
 });
 
