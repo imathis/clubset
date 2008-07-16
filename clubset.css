@@ -68,31 +68,31 @@ body{
   background-image: url("images/diamonds.png");
 }
 .red-clear {
-  background-position: 0;
+  background-position: 0 0;
 }
 .blue-clear {
-  background-position: 0 34px;
+  background-position: 0 -34px;
 }
 .green-clear {
-  background-position: 0 68px;
+  background-position: 0 -68px;
 }
 .red-stripe {
-  background-position: 0 102px;
+  background-position: 0 -102px;
 }
 .blue-stripe {
-  background-position: 0 136px;
+  background-position: 0 -136px;
 }
 .green-stripe {
-  background-position: 0 170px;
+  background-position: 0 -170px;
 }
 .red-full {
-  background-position: 0 204px;
+  background-position: 0 -204px;
 }
 .blue-full {
-  background-position: 0 238px;
+  background-position: 0 -238px;
 }
 .green-full {
-  background-position: 0 272px;
+  background-position: 0 -272px;
 }
 
 /*  Style code for transitions  */

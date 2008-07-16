@@ -77,7 +77,7 @@ Object.extend(Fx.prototype, {
   initialize:function(){
   },
   runOpeningFx: function() {
-    table = document.querySelector("#table");
+    table = document.getElementById("table");
     table.className = '';
   },
   setOpeningFx: function (table) {
