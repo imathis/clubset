@@ -1,27 +1,24 @@
 body{
   padding:0;
   margin:0;
-  overflow: hidden;
+  background:#333;
 }
 #table {
   height: 361px;
   width: 298px;
   margin: 0 auto;
   overflow: hidden;
-  background: url("images/table.png") no-repeat #000;
+  background: #000 url("images/table.png") no-repeat;
   padding: 55px 11px 0 11px;
+  -webkit-transition: all 0.6s ease-out;
 }
 
 .card {
-  height: 38px;
-  width: 80px;
-  padding: 8px;
   display: inline-block;
-  background: url("images/card.png") no-repeat;
   margin-top: 0px;
   opacity: 1;
   margin-bottom: 5px;
-  -webkit-transition: all 0.2s ease-in-out;
+  -webkit-transition: all 0.6s ease-out;
 }
 .visible {
   opacity: 1;
@@ -35,17 +32,107 @@ body{
 }
 
 .face {
+  height: 38px;
+  width: 80px;
+  padding: 8px;
+  background: url("images/card.png") no-repeat;
   text-align: center;
+  opacity: 1;
+  -webkit-transition: all 1.2s ease-in;
 }
 .face.selected{
   background-position: 0 -108px;
 }
-.face img {
-  padding-top: 1px;
+.face .mark {
+  margin-top: 1px;
 }
-.face img:first-child {
+.face .mark:first-child {
   margin-right: 1px;
 }
-.face img:last-child {
+.face .mark:last-child {
   margin-left: 1px;
+}
+.mark {
+  width:26px;
+  height:34px;
+  overflow:0;
+  display:inline-block;
+}
+.heart {
+  background-image: url("images/hearts.png");
+}
+.club {
+  background-image: url("images/clubs.png");
+}
+.diamond {
+  background-image: url("images/diamonds.png");
+}
+.red-clear {
+  background-position: 0;
+}
+.blue-clear {
+  background-position: 0 34px;
+}
+.green-clear {
+  background-position: 0 68px;
+}
+.red-stripe {
+  background-position: 0 102px;
+}
+.blue-stripe {
+  background-position: 0 136px;
+}
+.green-stripe {
+  background-position: 0 170px;
+}
+.red-full {
+  background-position: 0 204px;
+}
+.blue-full {
+  background-position: 0 238px;
+}
+.green-full {
+  background-position: 0 272px;
+}
+
+/*  Style code for transitions  */
+/*  Opening transition for 12 cards  */
+.mixed .face{
+  opacity: 0;
+}
+.mixed #card1 {
+  -webkit-transform: translate(-130px,-130px);
+}
+.mixed #card4 {
+  -webkit-transform: translate(-100px, -50px);
+}
+.mixed #card7 {
+  -webkit-transform: translate(-100px,50px);
+}
+.mixed #card10 {
+  -webkit-transform: translate(-130px,130px);
+}
+.mixed #card3 {
+  -webkit-transform: translate(130px,-130px);
+}
+.mixed #card6 {
+  -webkit-transform: translate(100px, -50px);
+}
+.mixed #card9 {
+  -webkit-transform: translate(100px, 50px);
+}
+.mixed #card12 {
+  -webkit-transform: translate(130px,130px);
+}
+.mixed #card2 {
+  -webkit-transform: translate(0,-130px);
+}
+.mixed #card5 {
+  -webkit-transform: translate(0, -50px);
+}
+.mixed #card8 {
+  -webkit-transform: translate(0, 50px);
+}
+.mixed #card11 {
+  -webkit-transform: translate(0,130px);
 }
