@@ -26,18 +26,16 @@
         
         'should have a table': function() {with(self){
           expect(game.table).should_not_be(null);
+          expect($('table')).should_not_be(null);
         }},
         
         'should deal twelve cards to the table, removing them from the deck': function() {with(self){
-          game.table.deal();
           expect(game.table.cards.length).should_be(12);
           expect(game.table.deck.cards.length).should_be(69);
         }},
         
         'should deal different cards on each deal': function() {with(self) {
-          game.table.deal();
           game2 = new Game();
-          game2.table.deal();
           
           var equalInAllPositions = true;
           game2.table.cards.forEach(function(card, index) {
@@ -53,8 +51,9 @@
         }},
         
         'should have 81 cards, each with a different face': function() {with(self){
-          expect(game.table.deck.cards.length).should_be(81);
-          expect(typeof game.table.deck.cards[0]).should_not_be('undefined');
+          var aDeck = new Deck();
+          expect(aDeck.cards.length).should_be(81);
+          expect(typeof aDeck.cards[0]).should_not_be('undefined');
           
           var seen = new Array();
           game.table.deck.cards.forEach(function(card) {
@@ -67,26 +66,25 @@
       });
       
       describe('Card', {
-        'should have an image': function() {with(self){
-          expect(new Card('square', 'pink', 'dirt', 4).image).should_be('square-pink-dirt.png');
+        'should have an image class': function() {with(self){
+          expect(new Card('square', 'pink', 'dirt', 4).image).should_be('square pink-dirt');
         }}
       });
       
       describe('Table', {
-        
-        'table should have a deck': function() {with(self){
-          expect(game.table.deck).should_not_be(null);
+        'before': function() {with(self){
+          game = new Game();
         }},
         
-        'should build all cards according to face': function() {with(self){
-          var table = new Table();
-          table.cards = [new Card('club', 'blue', 'stripe', 3)];
-          table.build();
-          
-          expect($('table')).should_not_be(null);
-          expect(document.getElementsByClassName('card').length).should_be(1);
-          expect(document.getElementsByClassName('face').length).should_be(1);
-          expect(document.getElementsByClassName('mark').length).should_be(3);
+        'should have a deck': function() {with(self){
+          expect(game.table.deck).should_not_be(null);
+        }},
+
+        'should have cards whose marks have classes based on image type': function() {with(self){
+          var card1 = game.table.cards[0];
+          var faceClass = card1.shape + ' ' + card1.color + '-' + card1.fill;
+          var cardHtml = $('card1').innerHTML;
+          expect(cardHtml.indexOf(faceClass)).should_not_be(-1); //checks for appearance of expected class name
         }}
       });
     // ]]>

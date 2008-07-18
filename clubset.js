@@ -2,6 +2,7 @@ Game = Class.create();
 Object.extend(Game.prototype, {
   initialize: function() {
     this.table = new Table();
+    this.table.build();
   }
 });
 Table = Class.create();
@@ -9,13 +10,13 @@ Object.extend(Table.prototype, {
   initialize: function() {
       this.deck = new Deck();
       this.fx = new Fx();
-  },
-  deal: function() {
-    this.deck.shuffle();
-    this.cards = this.deck.cards.splice(0,12);
+      if(table = document.getElementById('table')){
+        document.body.removeChild(table); //removes old table if a new game is started
+      }
   },
   
   build: function() {
+    this.cards = this.deck.deal();
     var table = document.createElement('div');
     table.id = 'table';
     this.fx.setOpeningFx(table);
@@ -57,10 +58,14 @@ Object.extend(Deck.prototype, {
         }, this)
       }, this)
     }, this);
+    this.shuffle();
   },
   
   shuffle: function() {
     this.cards.shuffle();
+  },
+  deal: function (){
+    return this.cards.splice(0,12);
   }
 });
 
