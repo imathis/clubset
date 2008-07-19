@@ -24,22 +24,17 @@
           game = new Game();
         }},
         
-        'should have a table': function() {with(self){
-          expect(game.table).should_not_be(null);
-          expect($('table')).should_not_be(null);
-        }},
-        
         'should deal twelve cards to the table, removing them from the deck': function() {with(self){
-          expect(game.table.cards.length).should_be(12);
-          expect(game.table.deck.cards.length).should_be(69);
+          expect(game.tableModel.cards.length).should_be(12);
+          expect(game.tableModel.deck.cards.length).should_be(69);
         }},
         
         'should deal different cards on each deal': function() {with(self) {
           game2 = new Game();
           
           var equalInAllPositions = true;
-          game2.table.cards.forEach(function(card, index) {
-            equalInAllPositions = equalInAllPositions && cardsEqual(card, game.table.cards[index]);
+          game2.tableModel.cards.forEach(function(card, index) {
+            equalInAllPositions = equalInAllPositions && cardsEqual(card, game.tableModel.cards[index]);
           });
           expect(equalInAllPositions).should_be(false);
         }}
@@ -56,7 +51,7 @@
           expect(typeof aDeck.cards[0]).should_not_be('undefined');
           
           var seen = new Array();
-          game.table.deck.cards.forEach(function(card) {
+          game.tableModel.deck.cards.forEach(function(card) {
             seen.forEach(function(seenCard) {
               expect(cardsEqual(card, seenCard)).should_be(false);
             });
@@ -77,14 +72,7 @@
         }},
         
         'should have a deck': function() {with(self){
-          expect(game.table.deck).should_not_be(null);
-        }},
-
-        'should have cards whose marks have classes based on image type': function() {with(self){
-          var card1 = game.table.cards[0];
-          var faceClass = card1.shape + ' ' + card1.color + '-' + card1.fill;
-          var cardHtml = $('card1').innerHTML;
-          expect(cardHtml.indexOf(faceClass)).should_not_be(-1); //checks for appearance of expected class name
+          expect(game.tableModel.deck).should_not_be(null);
         }}
       });
     // ]]>

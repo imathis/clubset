@@ -13,7 +13,7 @@ body{
   -webkit-transition: all 0.6s ease-out;
 }
 
-.card {
+.hot .card {
   display: inline-block;
   margin-top: 0px;
   opacity: 1;
@@ -31,7 +31,7 @@ body{
   margin-left: 5px;
 }
 
-.face {
+.hot .face {
   height: 38px;
   width: 80px;
   padding: 8px;
@@ -97,42 +97,43 @@ body{
 
 /*  Style code for transitions  */
 /*  Opening transition for 12 cards  */
-.mixed .face{
+.face{
   opacity: 0;
 }
-.mixed #card1 {
+#card1 {
   -webkit-transform: translate(-130px,-130px);
+  
 }
-.mixed #card4 {
+#card4 {
   -webkit-transform: translate(-100px, -50px);
 }
-.mixed #card7 {
+#card7 {
   -webkit-transform: translate(-100px,50px);
 }
-.mixed #card10 {
+#card10 {
   -webkit-transform: translate(-130px,130px);
 }
-.mixed #card3 {
+#card3 {
   -webkit-transform: translate(130px,-130px);
 }
-.mixed #card6 {
+#card6 {
   -webkit-transform: translate(100px, -50px);
 }
-.mixed #card9 {
+#card9 {
   -webkit-transform: translate(100px, 50px);
 }
-.mixed #card12 {
+#card12 {
   -webkit-transform: translate(130px,130px);
 }
-.mixed #card2 {
+#card2 {
   -webkit-transform: translate(0,-130px);
 }
-.mixed #card5 {
+#card5 {
   -webkit-transform: translate(0, -50px);
 }
-.mixed #card8 {
+#card8 {
   -webkit-transform: translate(0, 50px);
 }
-.mixed #card11 {
+#card11 {
   -webkit-transform: translate(0,130px);
 }

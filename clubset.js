@@ -1,43 +1,86 @@
 Game = Class.create();
 Object.extend(Game.prototype, {
   initialize: function() {
-    this.table = new Table();
-    this.table.build();
+    this.tableModel = new TableModel();
   }
 });
-Table = Class.create();
-Object.extend(Table.prototype, {
+
+TableModel = Class.create();
+Object.extend(TableModel.prototype, {
   initialize: function() {
-      this.deck = new Deck();
-      this.fx = new Fx();
-      if(table = document.getElementById('table')){
-        document.body.removeChild(table); //removes old table if a new game is started
-      }
+    this._observers = new Object();
+    this.selectedCards = new Array();
+    
+    this.deck = new Deck();
+    this._setCards(this.deck.deal());
   },
   
-  build: function() {
-    this.cards = this.deck.deal();
-    var table = document.createElement('div');
-    table.id = 'table';
-    this.fx.setOpeningFx(table);
-    var count = 1;
-    for(var i = 0; i<this.cards.length; i++) {
-      card = this.cards[i];
-      var face = document.createElement('div');
-      face.className = 'face';
-      for (var index = 0; index < card.count; index++) {
-        var img = document.createElement('div');
-        img.className = 'mark '+card.image;
-        face.appendChild(img);
-      }
+  observe: function(eventName, callback) {
+    if (!this._observers[eventName]) this._observers[eventName] = [];
+    this._observers[eventName].push(callback);
+  },
+  
+  selectCard: function(card) {
+    this.selectedCards.push(card);
+  },
+  
+  _setCards: function(cards) {
+    this.cards = cards;
+    for (var i=0; i<(this._observers.cardsChanged || []).length; i++)
+      this._observers.cardsChanged[i](this.cards);
+  }
+});
+
+TableView = Class.create();
+Object.extend(TableView.prototype, {
+  initialize: function(tableModel) {
+    this.tableModel = tableModel;
+    this.tableModel.observe('cardsChanged', this._update.bind(this));
+    
+    this._build();
+    this._update();
+    this.fx = new Fx(this.table);
+    setTimeout(this.fx.runOpeningFx.bind(this.fx), 1500);
+  },
+  
+  onclick: function(event) {
+    var cardElement = event.target;
+    while (cardElement.parentNode && cardElement.className != 'card')
+      cardElement = cardElement.parentNode;
+    if (cardElement && cardElement.cardIndex)
+      this.tableModel.selectCard(this.tableModel.cards[cardElement.cardIndex-1])
+  },
+  
+  _build: function() {
+    this.table = document.createElement('div');
+    this.table.id = 'table';
+    for(var cardIndex = 1; cardIndex<=12; cardIndex++) {
       var cardElement = document.createElement('div');
       cardElement.className = 'card';
-      cardElement.id = 'card'+(count++);
-      cardElement.appendChild(face);
-      table.appendChild(cardElement);
+      cardElement.id = 'card'+cardIndex;
+      cardElement.cardIndex = cardIndex;
+      this.table.appendChild(cardElement);
     }
-    document.body.appendChild(table);
-    setTimeout(this.fx.runOpeningFx, 1500);
+    document.body.appendChild(this.table);
+    this.table.addEventListener('click', this.onclick.bind(this), false);
+  },
+  
+  _update: function() {
+    for (var cardIndex = 0; cardIndex < this.tableModel.cards.length; cardIndex++)
+      this._applyFace(this.tableModel.cards[cardIndex], cardIndex+1);
+  },
+  
+  _applyFace: function(card, cardIndex) {
+    var face = document.createElement('div');
+    face.className = 'face';
+    for (var imageIndex = 0; imageIndex < card.count; imageIndex++) {
+      var img = document.createElement('div');
+      img.className = 'mark '+card.image;
+      face.appendChild(img);
+    }
+    var cardElement = $('card'+cardIndex);
+    cardElement.innerHTML = '';
+    cardElement.appendChild(face);
   }
 });
 
@@ -79,14 +122,11 @@ Object.extend(Card.prototype, {
 
 Fx = Class.create();
 Object.extend(Fx.prototype, {
-  initialize:function(){
+  initialize:function(table){
+    this.table = table;
   },
   runOpeningFx: function() {
-    table = document.getElementById("table");
-    table.className = '';
-  },
-  setOpeningFx: function (table) {
-    table.className = 'mixed';
+    this.table.className = 'hot';
   }
 });
 
