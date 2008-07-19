@@ -47,8 +47,10 @@ Object.extend(TableView.prototype, {
     var cardElement = event.target;
     while (cardElement.parentNode && cardElement.className != 'card')
       cardElement = cardElement.parentNode;
-    if (cardElement && cardElement.cardIndex)
-      this.tableModel.selectCard(this.tableModel.cards[cardElement.cardIndex-1])
+    if (cardElement && cardElement.cardIndex) {
+      this.tableModel.selectCard(this.tableModel.cards[cardElement.cardIndex-1]);
+      Element.addClassName(cardElement, 'selected');
+    }
   },
   
   _build: function() {
