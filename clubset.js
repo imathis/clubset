@@ -54,6 +54,7 @@ Object.extend(TableView.prototype, {
   _build: function() {
     this.table = document.createElement('div');
     this.table.id = 'table';
+    this.table.className = 'before-deal';
     for(var cardIndex = 1; cardIndex<=12; cardIndex++) {
       var cardElement = document.createElement('div');
       cardElement.className = 'card';
@@ -126,7 +127,7 @@ Object.extend(Fx.prototype, {
     this.table = table;
   },
   runOpeningFx: function() {
-    this.table.className = 'hot';
+    this.table.className = 'after-deal';
   }
 });
 

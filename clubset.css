@@ -3,7 +3,7 @@ body{
   margin:0;
   background:#333;
 }
-#table {
+#table, #table.before-deal{
   height: 361px;
   width: 298px;
   margin: 0 auto;
@@ -13,7 +13,7 @@ body{
   -webkit-transition: all 0.6s ease-out;
 }
 
-.hot .card {
+.card {
   display: inline-block;
   margin-top: 0px;
   opacity: 1;
@@ -31,13 +31,13 @@ body{
   margin-left: 5px;
 }
 
-.hot .face {
+.face {
+  opacity: 1;
   height: 38px;
   width: 80px;
   padding: 8px;
   background: url("images/card.png") no-repeat;
   text-align: center;
-  opacity: 1;
   -webkit-transition: all 1.2s ease-in;
 }
 .face.selected{
@@ -97,43 +97,42 @@ body{
 
 /*  Style code for transitions  */
 /*  Opening transition for 12 cards  */
-.face{
+.before-deal .face{
   opacity: 0;
 }
-#card1 {
+.before-deal #card1 {
   -webkit-transform: translate(-130px,-130px);
-  
 }
-#card4 {
+.before-deal #card4 {
   -webkit-transform: translate(-100px, -50px);
 }
-#card7 {
+.before-deal #card7 {
   -webkit-transform: translate(-100px,50px);
 }
-#card10 {
+.before-deal #card10 {
   -webkit-transform: translate(-130px,130px);
 }
-#card3 {
+.before-deal #card3 {
   -webkit-transform: translate(130px,-130px);
 }
-#card6 {
+.before-deal #card6 {
   -webkit-transform: translate(100px, -50px);
 }
-#card9 {
+.before-deal #card9 {
   -webkit-transform: translate(100px, 50px);
 }
-#card12 {
+.before-deal #card12 {
   -webkit-transform: translate(130px,130px);
 }
-#card2 {
+.before-deal #card2 {
   -webkit-transform: translate(0,-130px);
 }
-#card5 {
+.before-deal #card5 {
   -webkit-transform: translate(0, -50px);
 }
-#card8 {
+.before-deal #card8 {
   -webkit-transform: translate(0, 50px);
 }
-#card11 {
+.before-deal #card11 {
   -webkit-transform: translate(0,130px);
 }
