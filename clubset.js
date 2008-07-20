@@ -1,94 +1,43 @@
-Game = Class.create();
-Object.extend(Game.prototype, {
+Game = Class.create({
   initialize: function() {
-    this.tableModel = new TableModel();
+    this.table = new TableModel();
+  },
+  
+  start: function() {
+    this.table = new TableModel();
+    this.tableView = new TableView(this.table);
   }
 });
 
-TableModel = Class.create();
-Object.extend(TableModel.prototype, {
+TableModel = Class.create({
   initialize: function() {
-    this._observers = new Object();
-    this.selectedCards = new Array();
+    this._observers = new Element('div');
+    this.selectedCards = $A();
     
     this.deck = new Deck();
-    this._setCards(this.deck.deal());
+    this.placeCards(this.deck.deal());
   },
   
   observe: function(eventName, callback) {
-    if (!this._observers[eventName]) this._observers[eventName] = [];
-    this._observers[eventName].push(callback);
+    this._observers.observe('tableModel:' + eventName, callback);
   },
   
-  selectCard: function(card) {
+  toggleCard: function(card) {
+    if (this.selectedCards.include(card)) {
+      this.selectedCards = this.selectedCards.without(card);
+      return false;
+    }
     this.selectedCards.push(card);
+    return true;
   },
   
-  _setCards: function(cards) {
+  placeCards: function(cards) {
     this.cards = cards;
-    for (var i=0; i<(this._observers.cardsChanged || []).length; i++)
-      this._observers.cardsChanged[i](this.cards);
+    this._observers.fire('tableModel:cardsChanged', this.cards);
   }
 });
 
-TableView = Class.create();
-Object.extend(TableView.prototype, {
-  initialize: function(tableModel) {
-    this.tableModel = tableModel;
-    this.tableModel.observe('cardsChanged', this._update.bind(this));
-    
-    this._build();
-    this._update();
-    this.fx = new Fx(this.table);
-    setTimeout(this.fx.runOpeningFx.bind(this.fx), 1500);
-  },
-  
-  onclick: function(event) {
-    var cardElement = event.target;
-    while (cardElement.parentNode && cardElement.className != 'card')
-      cardElement = cardElement.parentNode;
-    if (cardElement && cardElement.cardIndex) {
-      this.tableModel.selectCard(this.tableModel.cards[cardElement.cardIndex-1]);
-      Element.addClassName(cardElement, 'selected');
-    }
-  },
-  
-  _build: function() {
-    this.table = document.createElement('div');
-    this.table.id = 'table';
-    this.table.className = 'before-deal';
-    for(var cardIndex = 1; cardIndex<=12; cardIndex++) {
-      var cardElement = document.createElement('div');
-      cardElement.className = 'card';
-      cardElement.id = 'card'+cardIndex;
-      cardElement.cardIndex = cardIndex;
-      this.table.appendChild(cardElement);
-    }
-    document.body.appendChild(this.table);
-    this.table.addEventListener('click', this.onclick.bind(this), false);
-  },
-  
-  _update: function() {
-    for (var cardIndex = 0; cardIndex < this.tableModel.cards.length; cardIndex++)
-      this._applyFace(this.tableModel.cards[cardIndex], cardIndex+1);
-  },
-  
-  _applyFace: function(card, cardIndex) {
-    var face = document.createElement('div');
-    face.className = 'face';
-    for (var imageIndex = 0; imageIndex < card.count; imageIndex++) {
-      var img = document.createElement('div');
-      img.className = 'mark '+card.image;
-      face.appendChild(img);
-    }
-    var cardElement = $('card'+cardIndex);
-    cardElement.innerHTML = '';
-    cardElement.appendChild(face);
-  }
-});
-
-Deck = Class.create();
-Object.extend(Deck.prototype, {
+Deck = Class.create({
   initialize: function() {
     var shapes = ['club', 'diamond', 'heart'],
         colors = ['green', 'blue', 'red'],
@@ -110,26 +59,72 @@ Object.extend(Deck.prototype, {
   shuffle: function() {
     this.cards.shuffle();
   },
+  
   deal: function (){
     return this.cards.splice(0,12);
   }
 });
 
-Card = Class.create();
-Object.extend(Card.prototype, {
+Card = Class.create({
   initialize: function(shape, color, fill, count) {
     this.shape = shape, this.color = color, this.fill = fill, this.count = count;
     this.image = this.shape + ' ' + this.color + '-' + this.fill;
   }
 });
 
-Fx = Class.create();
-Object.extend(Fx.prototype, {
+Fx = Class.create({
   initialize:function(table){
     this.table = table;
   },
   runOpeningFx: function() {
     this.table.className = 'after-deal';
+  }
+});
+
+TableView = Class.create({
+  initialize: function(tableModel) {
+    this.tableModel = tableModel;
+    this.tableModel.observe('cardsChanged', this._update.bind(this));
+    
+    this._build();
+    this._update();
+    this.fx = new Fx(this.table);
+    setTimeout(this.fx.runOpeningFx.bind(this.fx), 1500);
+  },
+  
+  onclick: function(event) {
+    var cardElement = event.target.hasClassName('card') ? event.target : event.target.up('.card');
+    if (cardElement) {
+      var selected = this.tableModel.toggleCard(this.tableModel.cards[cardElement.cardIndex-1]);
+      if (selected)
+        cardElement.addClassName('selected');
+      else
+        cardElement.removeClassName('selected');
+    }
+  },
+  
+  _build: function() {
+    this.table = new Element('div', {'id':'table', 'class':'before-deal'});
+    for (var cardIndex = 1; cardIndex <= 12; cardIndex++) {
+      var card = new Element('div', {'id':'card'+cardIndex, 'class':'card'});
+      card.cardIndex = cardIndex;
+      this.table.insert(card);
+    }
+    document.body.insert(this.table);
+    this.table.observe('click', this.onclick.bind(this));
+  },
+  
+  _update: function() {
+    for (var cardIndex = 0; cardIndex < this.tableModel.cards.length; cardIndex++)
+      this._applyFace(this.tableModel.cards[cardIndex], cardIndex+1);
+  },
+  
+  _applyFace: function(card, cardIndex) {
+    var face = new Element('div', {'class':'face'});
+    card.count.times(function() {
+      face.insert(new Element('div', {'class':'mark '+card.image}));
+    });
+    $('card'+cardIndex).update(face);
   }
 });
 

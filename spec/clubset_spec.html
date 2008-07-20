@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="assets/JSSpec.css" type="text/css" />
     <script src="assets/diff_match_patch.js" type="text/javascript"></script>
     <script src="assets/JSSpec.js" type="text/javascript"></script>
-    <script src="../prototype.lite.js" type="application/x-javascript"></script>
+    <script src="../prototype.js" type="application/x-javascript"></script>
     <script src="../clubset.js" type="application/x-javascript"></script>
     <script type="text/javascript">
     // <![CDATA[
@@ -25,16 +25,16 @@
         }},
         
         'should deal twelve cards to the table, removing them from the deck': function() {with(self){
-          expect(game.tableModel.cards.length).should_be(12);
-          expect(game.tableModel.deck.cards.length).should_be(69);
+          expect(game.table.cards.length).should_be(12);
+          expect(game.table.deck.cards.length).should_be(69);
         }},
         
         'should deal different cards on each deal': function() {with(self) {
           game2 = new Game();
           
           var equalInAllPositions = true;
-          game2.tableModel.cards.forEach(function(card, index) {
-            equalInAllPositions = equalInAllPositions && cardsEqual(card, game.tableModel.cards[index]);
+          game2.table.cards.forEach(function(card, index) {
+            equalInAllPositions = equalInAllPositions && cardsEqual(card, game.table.cards[index]);
           });
           expect(equalInAllPositions).should_be(false);
         }}
@@ -51,7 +51,7 @@
           expect(typeof aDeck.cards[0]).should_not_be('undefined');
           
           var seen = new Array();
-          game.tableModel.deck.cards.forEach(function(card) {
+          game.table.deck.cards.forEach(function(card) {
             seen.forEach(function(seenCard) {
               expect(cardsEqual(card, seenCard)).should_be(false);
             });
@@ -72,7 +72,7 @@
         }},
         
         'should have a deck': function() {with(self){
-          expect(game.tableModel.deck).should_not_be(null);
+          expect(game.table.deck).should_not_be(null);
         }}
       });
     // ]]>

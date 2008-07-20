@@ -40,7 +40,7 @@ body{
   text-align: center;
   -webkit-transition: all 1.2s ease-in;
 }
-.selected .face{
+.selected .face {
   background-position: 0 -108px;
 }
 .face .mark {

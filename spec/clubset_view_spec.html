@@ -7,29 +7,35 @@
     <link rel="stylesheet" href="assets/JSSpec.css" type="text/css" />
     <script src="assets/diff_match_patch.js" type="text/javascript"></script>
     <script src="assets/JSSpec.js" type="text/javascript"></script>
-    <script src="../prototype.lite.js" type="application/x-javascript"></script>
+    <script src="../prototype.js" type="application/x-javascript"></script>
     <script src="../clubset.js" type="application/x-javascript"></script>
     <script type="text/javascript">
     // <![CDATA[
       describe('TableView', {
         'before': function() {with(self){
-          tableModel = new TableModel();
-          tableView = new TableView(tableModel);
+          game = new Game();
+          game.start();
         }},
         
         'after': function() {with(self){
           document.body.removeChild($('table'));
         }},
         
-        'should listen to card touch events': function() {with(self){
+        'should toggle card selection': function() {with(self){
           event = new Object();
           event.target = $('card3');
-          tableView.onclick(event);
-          expect(tableModel.selectedCards[0]).should_be(tableModel.cards[2]);
+          game.tableView.onclick(event);
+          expect(game.table.selectedCards.include(game.table.cards[2])).should_be(true);
+          expect(Element.hasClassName(event.target, 'selected')).should_be(true);
+          
+          game.tableView.onclick(event);
+          console.log(game.table.selectedCards)
+          expect(game.table.selectedCards.include(game.table.cards[2])).should_be(false);
+          expect(Element.hasClassName(event.target, 'selected')).should_be(false);
         }},
         
         'should have cards whose marks have classes based on image type': function() {with(self){
-          var card1 = tableModel.cards[0];
+          var card1 = game.table.cards[0];
           var faceClass = card1.shape + ' ' + card1.color + '-' + card1.fill;
           var cardHtml = $('card1').innerHTML;
           expect(cardHtml.indexOf(faceClass)).should_not_be(-1); //checks for appearance of expected class name

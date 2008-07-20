@@ -7,7 +7,7 @@
     <meta name='apple-touch -fullscreen' content='yes' />
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
     <title>ClubSet</title>
-    <script src="prototype.lite.js" type="application/x-javascript"></script>
+    <script src="prototype.js" type="application/x-javascript"></script>
     <script src="clubset.js" type="application/x-javascript"></script>
     <link rel="stylesheet" type="text/css" href="clubset.css">
   </head>
@@ -16,7 +16,7 @@
     // <![CDATA[
       Game.imagePath = 'images/';
       var game = new Game();
-      new TableView(game.tableModel);
+      game.start();
       window.scrollTo(0,0);
     // ]]>
     </script>
