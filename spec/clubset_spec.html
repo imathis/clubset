@@ -22,18 +22,20 @@
       describe('Game', {
         'before': function() {with(self){
           game = new Game();
+          game.start();
         }},
         
         'should deal twelve cards to the table, removing them from the deck': function() {with(self){
           expect(game.table.cards.length).should_be(12);
-          expect(game.table.deck.cards.length).should_be(69);
+          expect(game.deck.cards.length).should_be(69);
         }},
         
         'should deal different cards on each deal': function() {with(self) {
           game2 = new Game();
+          game2.start();
           
           var equalInAllPositions = true;
-          game2.table.cards.forEach(function(card, index) {
+          game2.table.cards.each(function(card, index) {
             equalInAllPositions = equalInAllPositions && cardsEqual(card, game.table.cards[index]);
           });
           expect(equalInAllPositions).should_be(false);
@@ -51,7 +53,7 @@
           expect(typeof aDeck.cards[0]).should_not_be('undefined');
           
           var seen = new Array();
-          game.table.deck.cards.forEach(function(card) {
+          game.deck.cards.forEach(function(card) {
             seen.forEach(function(seenCard) {
               expect(cardsEqual(card, seenCard)).should_be(false);
             });
@@ -69,10 +71,31 @@
       describe('Table', {
         'before': function() {with(self){
           game = new Game();
+          game.start();
         }},
         
         'should have a deck': function() {with(self){
-          expect(game.table.deck).should_not_be(null);
+          expect(game.deck).should_not_be(null);
+        }},
+        
+        'should have set cards replaced by game': function() {with(self){
+          var heardChange = false;
+          game._checkSet = function(cards) {return true};
+          game.table.observe('cardsChanged', function() {heardChange = true});
+          var originalCards = game.table.cards.slice(0,3);
+          
+          game.table.toggleCard(originalCards[0]);
+          game.table.toggleCard(originalCards[1]);
+          game.table.toggleCard(originalCards[2]);
+          
+          expect(game.foundSets.first()).should_be(originalCards);
+          
+          // expect(cardsEqual(originalCards[0], game.table.cards[0])).should_be(false);
+          // expect(cardsEqual(originalCards[1], game.table.cards[1])).should_be(false);
+          // expect(cardsEqual(originalCards[2], game.table.cards[2])).should_be(false);
+          // expect(heardChange).should_be(true);
+          // expect(game.table.selectedCards.length).should_be(0);
+          // expect(game.deck.cards.length).should_be(66);
         }}
       });
     // ]]>

@@ -1,11 +1,34 @@
 Game = Class.create({
   initialize: function() {
+    this.deck = new Deck();
     this.table = new TableModel();
+    this.tableView = new TableView(this.table);
+    
+    this.table.observe('selectionChanged', this.selectionChanged.bind(this));
+    
+    this.foundSets = [];
   },
   
   start: function() {
-    this.table = new TableModel();
-    this.tableView = new TableView(this.table);
+    this.table.placeCards(this.deck.deal());
+    this.tableView.runOpeningFx();
+  },
+  
+  selectionChanged: function(event) {
+    var selectedCards = event.memo;
+    if (selectedCards.length == 3 && this._checkSet(selectedCards)) {
+      this.foundSets.push(selectedCards);
+      var replacementCards = this.deck.deal(3);
+      selectedCards.each(function(card, index) {
+        var cardSlot = this.table.cards.indexOf(card);
+        this.table.cards[cardSlot] = replacementCards[index];
+      }.bind(this));
+      this.table.placeCards(this.table.cards);
+    }
+  },
+  
+  _checkSet: function(cards) {
+    return true;
   }
 });
 
@@ -13,9 +36,6 @@ TableModel = Class.create({
   initialize: function() {
     this._observers = new Element('div');
     this.selectedCards = $A();
-    
-    this.deck = new Deck();
-    this.placeCards(this.deck.deal());
   },
   
   observe: function(eventName, callback) {
@@ -23,17 +43,19 @@ TableModel = Class.create({
   },
   
   toggleCard: function(card) {
-    if (this.selectedCards.include(card)) {
+    if (this.selectedCards.include(card))
       this.selectedCards = this.selectedCards.without(card);
-      return false;
-    }
-    this.selectedCards.push(card);
-    return true;
+    else
+      this.selectedCards.push(card);
+      
+    this._observers.fire('tableModel:selectionChanged', this.selectedCards);
   },
   
   placeCards: function(cards) {
+    var memo = {past:this.cards, present:cards};
     this.cards = cards;
-    this._observers.fire('tableModel:cardsChanged', this.cards);
+    this.selectedCards.clear();
+    this._observers.fire('tableModel:cardsChanged', memo);
   }
 });
 
@@ -72,42 +94,30 @@ Card = Class.create({
   }
 });
 
-Fx = Class.create({
-  initialize:function(table){
-    this.table = table;
-  },
-  runOpeningFx: function() {
-    this.table.className = 'after-deal';
-  }
-});
-
 TableView = Class.create({
   initialize: function(tableModel) {
     this.tableModel = tableModel;
     this.tableModel.observe('cardsChanged', this._update.bind(this));
-    
     this._build();
-    this._update();
-    this.fx = new Fx(this.table);
-    setTimeout(this.fx.runOpeningFx.bind(this.fx), 1500);
   },
   
   onclick: function(event) {
     var cardElement = event.target.hasClassName('card') ? event.target : event.target.up('.card');
     if (cardElement) {
-      var selected = this.tableModel.toggleCard(this.tableModel.cards[cardElement.cardIndex-1]);
-      if (selected)
-        cardElement.addClassName('selected');
-      else
-        cardElement.removeClassName('selected');
+      this.tableModel.toggleCard(this.tableModel.cards[cardElement.cardSlot-1]);
+      cardElement.toggleClassName('selected');
     }
+  },
+  
+  runOpeningFx: function() {
+    (function() {this.table.className = 'after-deal'}).bind(this).delay(1.5);
   },
   
   _build: function() {
     this.table = new Element('div', {'id':'table', 'class':'before-deal'});
-    for (var cardIndex = 1; cardIndex <= 12; cardIndex++) {
-      var card = new Element('div', {'id':'card'+cardIndex, 'class':'card'});
-      card.cardIndex = cardIndex;
+    for (var cardSlot = 1; cardSlot <= 12; cardSlot++) {
+      var card = new Element('div', {'id':'card'+cardSlot, 'class':'card'});
+      card.cardSlot = cardSlot;
       this.table.insert(card);
     }
     document.body.insert(this.table);
@@ -115,16 +125,16 @@ TableView = Class.create({
   },
   
   _update: function() {
-    for (var cardIndex = 0; cardIndex < this.tableModel.cards.length; cardIndex++)
-      this._applyFace(this.tableModel.cards[cardIndex], cardIndex+1);
+    for (var cardSlot = 0; cardSlot < this.tableModel.cards.length; cardSlot++)
+      this._applyFace(this.tableModel.cards[cardSlot], cardSlot+1);
   },
   
-  _applyFace: function(card, cardIndex) {
+  _applyFace: function(card, cardSlot) {
     var face = new Element('div', {'class':'face'});
     card.count.times(function() {
       face.insert(new Element('div', {'class':'mark '+card.image}));
     });
-    $('card'+cardIndex).update(face);
+    $('card'+cardSlot).update(face);
   }
 });
 

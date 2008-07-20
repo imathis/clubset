@@ -29,7 +29,6 @@
           expect(Element.hasClassName(event.target, 'selected')).should_be(true);
           
           game.tableView.onclick(event);
-          console.log(game.table.selectedCards)
           expect(game.table.selectedCards.include(game.table.cards[2])).should_be(false);
           expect(Element.hasClassName(event.target, 'selected')).should_be(false);
         }},
