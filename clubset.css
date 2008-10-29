@@ -20,6 +20,12 @@ body{
   margin-bottom: 5px;
   -webkit-transition: all 0.6s ease-out;
 }
+.before-start .face {
+  background-position: bottom;
+}
+.before-start .mark {
+  opacity: 0;
+}
 .visible {
   opacity: 1;
 }
@@ -43,9 +49,6 @@ body{
 .selected .face {
   background-position: 0 -108px;
 }
-.face .mark {
-  margin-top: 1px;
-}
 .face .mark:first-child {
   margin-right: 1px;
 }
@@ -54,9 +57,12 @@ body{
 }
 .mark {
   width:26px;
-  height:34px;
+  height:30px;
   overflow:0;
   display:inline-block;
+}
+.face .mark {
+  margin-top: 4px;
 }
 .heart {
   background-image: url("images/hearts.png");
@@ -71,28 +77,28 @@ body{
   background-position: 0 0;
 }
 .blue-clear {
-  background-position: 0 -34px;
+  background-position: 0 -30px;
 }
 .green-clear {
-  background-position: 0 -68px;
+  background-position: 0 -60px;
 }
 .red-stripe {
-  background-position: 0 -102px;
+  background-position: 0 -90px;
 }
 .blue-stripe {
-  background-position: 0 -136px;
+  background-position: 0 -120px;
 }
 .green-stripe {
-  background-position: 0 -170px;
+  background-position: 0 -150px;
 }
 .red-full {
-  background-position: 0 -204px;
+  background-position: 0 -180px;
 }
 .blue-full {
-  background-position: 0 -238px;
+  background-position: 0 -210px;
 }
 .green-full {
-  background-position: 0 -272px;
+  background-position: 0 -240px;
 }
 
 /*  Style code for transitions  */

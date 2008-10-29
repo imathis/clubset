@@ -110,7 +110,8 @@ TableView = Class.create({
   },
   
   runOpeningFx: function() {
-    (function() {this.table.className = 'after-deal'}).bind(this).delay(1.5);
+    (function() {this.table.className = 'after-deal before-start'}).bind(this).delay(1.5);
+    (function() {this.table.className = 'after-deal'}).bind(this).delay(5);
   },
   
   _build: function() {
